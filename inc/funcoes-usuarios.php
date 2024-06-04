@@ -13,7 +13,8 @@ function inserirUsuario($conexao, $nome, $email, $tipo, $senha){
 
 function lerUsuarios($conexao){
     // Comando SQL
-    $sql = "SELECT id, nome, email, tipo FROM usuarios";
+    $sql = "SELECT id, nome, email, tipo 
+            FROM usuarios ORDER BY nome";
     
     // Execução do comando e armazenamento do resultado
     $resultado = mysqli_query($conexao, $sql) or die(mysqli_error($conexao));

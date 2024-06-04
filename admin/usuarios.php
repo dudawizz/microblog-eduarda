@@ -33,11 +33,11 @@ $listaDeUsuarios = lerUsuarios($conexao);
 				</thead>
 
 				<tbody>
-<?php foreach ($listaDeUsuarios as $usuarios) { ?>
+<?php foreach ($listaDeUsuarios as $usuario) { ?>
 					<tr>
-						<td> Nome... </td>
-						<td> E-mail... </td>
-						<td> Tipo... </td>
+						<td> <?=$usuario["nome"]?> </td>
+						<td> <?=$usuario["email"]?> </td>
+						<td> <?=$usuario["tipo"]?> </td>
 						<td class="text-center">
 							<a class="btn btn-warning" 
 							href="usuario-atualiza.php">
