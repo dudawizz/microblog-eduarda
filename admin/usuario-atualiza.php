@@ -1,6 +1,14 @@
 <?php 
 require_once "../inc/cabecalho-admin.php";
+require_once "../inc/funcoes-usuarios.php";
+
+/* Pegando o valor do parâmetro id vindo da URL */
+$id = $_GET['id'];
+
+/* Executando a função com o id e recuperando os dados usuário selecionado */
+$dadosUsuario = lerUmUsuario($conexao, $id);
 ?>
+<pre><?=var_dump($dadosUsuario)?></pre>
 
 
 <div class="row">
