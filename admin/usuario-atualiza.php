@@ -1,11 +1,15 @@
-<?php 
+<?php // usuario-atualiza
 require_once "../inc/cabecalho-admin.php";
 require_once "../inc/funcoes-usuarios.php";
+
+// Verificando se o usuário pode acessar esta página
+verificaNivel();
 
 /* Pegando o valor do parâmetro id vindo da URL */
 $id = $_GET['id'];
 
-/* Executando a função com o id e recuperando os dados usuário selecionado */
+/* Executando a função com o id e recuperando os dados
+do usuário selecionado */
 $dadosUsuario = lerUmUsuario($conexao, $id);
 
 if(isset($_POST['atualizar'])){
@@ -13,30 +17,29 @@ if(isset($_POST['atualizar'])){
 	$email = $_POST['email'];
 	$tipo = $_POST['tipo'];
 
-/* Lógica para tratamento da senha
-   Se o campo da senha estiver vazio OU se a senha digitada for a mesma já existente no banco, então significa que o usuário NÃO ALTEROU A SENHA. Portanto, devemos MANTER a senha existente no banco.
-*/
-if (empty($_POST['senha']) || 
-	password_verify($_POST['senha'], $dadosUsuario['senha']) ){
-
-	// Manter a mesma senha (copiamos ela para uma variável)
-	$senha = $dadosUsuario['senha'];
-} else {
-	$senha = password_hash($_POST['senha'], PASSWORD_DEFAULT);
-}
-/* Caso contrário, pegaremos a senha nova digitada e a CODIFICAREMOS ANTES de mandar/salvar no banco. */
+	/* Lógica para tratamento da senha 
+	Se o campo da senha estiver vazio OU se a senha digitada for
+	a mesma já existente no banco, então significa que o usuário
+	NÃO ALTEROU A SENHA. Portanto, devemos MANTER a senha
+	existente no banco.	*/
+	if( empty($_POST['senha']) || 
+		password_verify($_POST['senha'], $dadosUsuario['senha']) ){
+		
+		// Manter a mesma senha (copiamos ela para uma variável)
+		$senha = $dadosUsuario['senha'];
+	} else {
+	/* Caso contrário, pegaremos a senha nova digitada
+	e a CODIFICAREMOS ANTES de mandar/salvar no banco. */
+		$senha = password_hash($_POST['senha'], PASSWORD_DEFAULT);
+	}
 
 	// Chamamos/executamos o UPDATE através da função
 	atualizarUsuario($conexao, $id, $nome, $email, $senha, $tipo);
 
-	//  Redirecionamos para a página que mostra todos os usuários
-	header("location:usuarios.php"); 
-
+	// Redirecionamos para a página que mostra todos usuários
+	header("location:usuarios.php");
 } // FIM IF ISSET
-
-
 ?>
-
 
 <div class="row">
 	<article class="col-12 bg-white rounded shadow my-1 py-4">
@@ -67,14 +70,14 @@ if (empty($_POST['senha']) ||
 				<select class="form-select" name="tipo" id="tipo" required>
 					<option value=""></option>
 					
-					<option 
-					<?php if($dadosUsuario['tipo'] == 'editor' ) echo 'selected' ?> 
-					value="editor">Editor</option>
 					
-					<option 
-					<?php if($dadosUsuario['tipo'] == 'admin' ) echo 'selected' ?> 
-					value="admin">Administrador</option>
-				
+			<option <?php if($dadosUsuario['tipo'] == 'editor') echo 'selected' ?> value="editor">
+			Editor</option>
+					
+					
+			<option <?php if($dadosUsuario['tipo'] == 'admin') echo 'selected' ?> value="admin">Administrador</option>
+
+
 				</select>
 			</div>
 			
@@ -88,4 +91,3 @@ if (empty($_POST['senha']) ||
 <?php 
 require_once "../inc/rodape-admin.php";
 ?>
-

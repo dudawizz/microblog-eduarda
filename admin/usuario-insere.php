@@ -1,5 +1,8 @@
-<?php 
+<?php // usuario-insere
 require_once "../inc/cabecalho-admin.php";
+
+// Verificando se o usuário pode acessar esta página
+verificaNivel();
 
 // Importando as funções de manipulação dos usuários
 require_once "../inc/funcoes-usuarios.php";
@@ -10,16 +13,15 @@ if(isset($_POST['inserir'])){
 	$nome = $_POST['nome'];
 	$email = $_POST['email'];
 	$tipo = $_POST['tipo'];
-
+	
 	// Capturando a senha e a codificando
 	$senha = password_hash($_POST['senha'], PASSWORD_DEFAULT);
-	
+
 	// Chamando a função de inserir usuário e passando os dados
 	inserirUsuario($conexao, $nome, $email, $tipo, $senha);
 
 	// Redirecionando para a lista de usuários
 	header("location:usuarios.php");
-
 }
 ?>
 
@@ -67,4 +69,3 @@ if(isset($_POST['inserir'])){
 <?php 
 require_once "../inc/rodape-admin.php";
 ?>
-
