@@ -44,7 +44,6 @@ $dadosUsuario = lerUmUsuario($conexao, $id);
 
 /* 5) DESAFIO: faça com que, ao mudar o nome do usuário, automaticamente apareça o novo nome na index.php */
 $_SESSION['nome'] = $nome;
-
 } // isset fechamento
 ?>
 

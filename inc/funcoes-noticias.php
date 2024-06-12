@@ -115,4 +115,15 @@ function atualizarNoticia($conexao, $titulo, $texto, $resumo, $imagem, $idNotici
     mysqli_query($conexao, $sql) or die(mysqli_error($conexao));
 }
 
-function excluirNoticia($conexao){}
+function excluirNoticia($conexao, $idNoticia, $idUsuario, $tipoUsuario){
+    if($tipoUsuario == 'admin'){
+        // pode apagar QUALQUER notícia sabendo o id dela
+        $sql = "DELETE FROM noticias 
+               WHERE id =$idNoticia";
+    } else {
+        $sql = "DELETE FROM noticias
+               WHERE id = $idNoticia AND usuario_id = $idUsuario";
+    }
+
+    mysqli_query($conexao, $sql) or die(mysqli_error($conexao));
+}
