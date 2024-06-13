@@ -117,28 +117,31 @@ function atualizarNoticia($conexao, $titulo, $texto, $resumo, $imagem, $idNotici
 
 function excluirNoticia($conexao, $idNoticia, $idUsuario, $tipoUsuario){
     if($tipoUsuario == 'admin'){
-        // pode apagar QUALQUER notícia sabendo o id dela
-        $sql = "DELETE FROM noticias 
-               WHERE id =$idNoticia";
+        // Pode apagar QUALQUER notícia sabendo o id dela
+        $sql = "DELETE FROM noticias WHERE id = $idNoticia";
     } else {
-        $sql = "DELETE FROM noticias
-               WHERE id = $idNoticia AND usuario_id = $idUsuario";
+        // Pode apagar SOMENTE A PRÓPRIA notícia sabendo id dela e do user
+        $sql = "DELETE FROM noticias 
+                WHERE id = $idNoticia AND usuario_id = $idUsuario";
     }
 
     mysqli_query($conexao, $sql) or die(mysqli_error($conexao));
 }
 
-/* ********************************* */
 
-/* Funções usadas nas páginas PÚBLICAS no Microblog: index, noticia, resultados */
+/* ****************************** */
+
+/* Funções usadas nas páginas PÚBLICAS do Microblog:
+index, noticia, resultados */
 
 // index.php
 function lerTodasNoticias($conexao){
     $sql = "SELECT titulo, imagem, resumo, id
             FROM noticias ORDER BY data DESC";
-    $resultado = mysqli_query($conexao, $sql)
+    
+    $resultado = mysqli_query($conexao, $sql) 
                     or die(mysqli_error($conexao));
-
+    
     return mysqli_fetch_all($resultado, MYSQLI_ASSOC);
 }
 
@@ -154,30 +157,42 @@ function lerNoticiaCompleta($conexao, $id){
             FROM noticias JOIN usuarios
             ON noticias.usuario_id = usuarios.id
             WHERE noticias.id = $id";
+    /* $sql = "SELECT 
+                n.id,
+                n.data,
+                n.titulo,
+                n.texto,
+                n.imagem,
+                u.nome
+            FROM 
+                noticias n
+            JOIN 
+                usuarios u ON n.usuario_id = u.id
+            WHERE n.id = $id"; */
 
-    $resultado = mysqli_query($conexao, $sql) or
-            die(mysqli_error($conexao));
+    $resultado = mysqli_query($conexao, $sql) or 
+                die(mysqli_error($conexao));
 
     return mysqli_fetch_assoc($resultado);
 }
 
 // resultados.php
-function busca($conexao, $termoDigitado){
-/* Atenção ao uso do operador LIKE em vez do igual e do operador coringa %. 
-
-Ambos são necessários para que a busca seja mais abrangente, permitindo que o termo esteja em qualquer lugar dentro das colunas
-
-*/
+function busca($conexao, $termoDigitado){ // android
+    /* Atenção ao uso do operador LIKE em vez do igual
+    e do operador coringa %.    
+    Ambos são necessários para que a busca seja
+    mais abrangente, permitindo que o termo esteja
+    em qualquer lugar dentro das colunas. */
 
     $sql = "SELECT id, data, titulo, resumo FROM noticias
-            WHERE titulo LIKE '%$termoDigitado%' OR
-                  resumo LIKE '%$termoDigitado%' OR
-                  texto LIKE '%$termoDigitado%'
-            
+            WHERE 
+                titulo LIKE '%$termoDigitado%' OR 
+                resumo LIKE '%$termoDigitado%' OR 
+                texto LIKE '%$termoDigitado%'
             ORDER BY data DESC";
 
-    $resultado = mysqli_query($conexao, $sql)
-                    or die(mysqli_error($conexao));
+    $resultado = mysqli_query($conexao, $sql) 
+                or die(mysqli_error($conexao));
 
     return mysqli_fetch_all($resultado, MYSQLI_ASSOC);
 }
